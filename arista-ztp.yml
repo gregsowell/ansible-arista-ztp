@@ -1,0 +1,77 @@
+---
+- name: zero touch provisioning for an Arista host
+  hosts: provision_host
+  gather_facts: false
+  vars:
+    host_ip: 10.1.12.99
+
+  tasks:
+  - name: set new ansible host via passed variables
+    ansible.builtin.set_fact:
+      ansible_host: "{{ host_ip }}"
+
+  - name: gather facts on host
+    arista.eos.eos_facts:
+      gather_subset: hardware
+    register: provision_facts
+
+#  - name: gather facts debug
+#    ansible.builtin.debug:
+#      var: provision_facts
+
+  - name: loop through hosts in inventory looking for matching serial number
+    when: hostvars[item]['serial'] == provision_facts.ansible_facts.ansible_net_serialnum
+    ansible.builtin.set_fact:
+      new_host: "{{ item }}"
+    loop: "{{ groups['all'] }}"
+
+  
+- name: provision the found switch
+  hosts: "{{ hostvars['provision_host']['new_host'] }}"
+  gather_facts: false
+  vars:
+    secret_password: lab
+    # figure out the default gateway based on switch IP
+    default_gateway: "{{ int_ip | regex_search('\\b(?:[0-9]{1,3}\\.){3}\\b') }}1"
+
+  tasks:
+  - name: set new ansible host via passed variables
+    ansible.builtin.set_fact:
+      int_ip: "{{ hostvars[inventory_hostname]['ansible_host'] }}"
+      ansible_host: "{{ host_ip }}"
+
+#  - name: debug
+#    ansible.builtin.debug:
+#      var: hostvars
+
+  - name: place the template config file on the host
+    arista.eos.eos_config:
+#      diff_against: intended
+#      intended_config: "{{ lookup('file', 'master.cfg') }}"
+      lines: "{{ lookup('template', 'arista_config.j2') }}"
+#      save_when: always
+    ignore_errors: true
+
+- name: connect into new switch and save
+  hosts: "{{ hostvars['provision_host']['new_host'] }}"
+  gather_facts: false
+  vars:
+
+  tasks:
+#  - name: set new ansible host via passed variables
+#    ansible.builtin.set_fact:
+#      int_ip: "{{ hostvars[inventory_hostname]['ansible_host'] }}"
+#      ansible_host: "{{ host_ip }}"
+
+#  - name: debug
+#    ansible.builtin.debug:
+#      var: ansible_host
+
+  - name: reset ip for host
+    ansible.builtin.set_fact:
+      ansible_host: "{{ int_ip }}"
+
+  - name: save to startup config
+    arista.eos.eos_command:
+      commands: copy running-config startup-config
+

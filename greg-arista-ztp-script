@@ -1,0 +1,33 @@
+?!
+hostname provision-me
+ip name-server vrf default 8.8.8.8
+!
+! ntp server <NTP-SERVER-IP>
+!
+username admin privilege 15 role network-admin secret lab
+!
+interface Management1
+ ip address 10.1.12.99/24
+!
+ip access-list open
+ 10 permit ip any any
+!
+ip route 0.0.0.0/0 10.1.12.1
+!
+ip routing
+!
+management api http-commands
+ no shutdown
+!
+! banner login
+! Welcome to $(hostname)!
+! This switch has been provisioned using the ZTPServer from Arista Networks
+! Docs: http://ztpserver.readthedocs.org/
+! Source Code: https://github.com/arista-eosplus/ztpserver
+! EOF
+!
+event-handler callaap
+ trigger on-startup-config
+ ! For default VRF, make sure to update the ztpserver url
+ action bash export SYSIP=`FastCli -p 15 -c 'show run int management 1 | grep -Eo "[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}"'`; curl -f -k -H 'Content-Type: application/json' -XPOST -d '{"extra_vars": "{\"host_ip\": \"'$SYSIP'\"}"}' --user MyUser:MyPassword https://10.1.12.34/api/v2/job_templates/146/launch/
+end

@@ -1,0 +1,13 @@
+username admin privilege 15 role network-admin secret {{ secret_password }}
+!
+hostname {{ inventory_hostname }}
+!
+spanning-tree mode rstp
+!
+no event-handler callaap
+!
+ip route 0.0.0.0/0 {{ default_gateway }}
+!
+interface Management1
+!   ip address {{ hostvars[inventory_hostname]['ansible_host'] }}/24
+   ip address {{ int_ip }}/24
