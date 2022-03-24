@@ -5,7 +5,7 @@
   tasks:
   - name: pull in config file
     ansible.builtin.include_vars:
-      file: "/configs/{{ inventory_hostname }}-vlandb.yml"
+      file: "configs/{{ inventory_hostname }}-vlandb.yml"
 
   - name: set vlans based on file settings
     arista.eos.eos_vlans:
