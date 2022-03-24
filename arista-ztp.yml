@@ -54,6 +54,7 @@
 #      intended_config: "{{ lookup('file', 'master.cfg') }}"
       lines: "{{ lookup('template', 'arista_config.j2') }}"
 #      save_when: always
+      replace: block
     ignore_errors: true
 
 - name: connect into new switch and save

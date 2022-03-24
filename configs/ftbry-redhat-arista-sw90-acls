@@ -1,0 +1,6 @@
+ip access-list open
+   10 permit ip any any
+!
+ip access-list mgmt
+   10 permit ip 10.0.0.0/8 any
+   100 deny ip any any

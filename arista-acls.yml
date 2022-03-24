@@ -1,16 +1,16 @@
-- name: configure vlan db on aristas
+- name: configure acls on aristas
   hosts: "{{ stat_host }}"
   gather_facts: false
   vars:
   tasks:
-  - name: parse the vlandb config
+  - name: parse the acls config
     arista.eos.eos_vlans:
-      running_config: "{{ lookup('file', 'configs/' + inventory_hostname + '-vlansdb') }}"
+      running_config: "{{ lookup('file', 'configs/' + inventory_hostname + '-acls') }}"
       state: parsed
     register: parsed_config
 
   - name: set vlans based on file settings
-    arista.eos.eos_vlans:
+    arista.eos.eos_acls:
       config: "{{ parsed_config.parsed }}"
       state: overridden
 
