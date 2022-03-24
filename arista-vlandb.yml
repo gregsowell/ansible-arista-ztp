@@ -10,7 +10,7 @@
   - name: set vlans based on file settings
     arista.eos.eos_vlans:
       config:
-      - vlan_id: item.vid
-        name: item.vname
+      - vlan_id: "{{ item.vid }}"
+        name: "{{ item.vname }}"
       state: overridden
     loop: "{{ vlans }}"
