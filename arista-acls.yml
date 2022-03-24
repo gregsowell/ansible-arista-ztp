@@ -4,7 +4,7 @@
   vars:
   tasks:
   - name: parse the acls config
-    arista.eos.eos_vlans:
+    arista.eos.eos_acls:
       running_config: "{{ lookup('file', 'configs/' + inventory_hostname + '-acls') }}"
       state: parsed
     register: parsed_config
