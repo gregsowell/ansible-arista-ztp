@@ -9,7 +9,7 @@
       state: parsed
     register: parsed_config
 
-  - name: set vlans based on file settings
+  - name: set acls based on file settings
     arista.eos.eos_acls:
       config: "{{ parsed_config.parsed }}"
       state: overridden
