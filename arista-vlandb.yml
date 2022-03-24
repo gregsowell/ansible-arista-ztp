@@ -1,0 +1,16 @@
+- name: configure vlan db on aristas
+  hosts: provision_host
+  gather_facts: false
+  vars:
+  tasks:
+  - name: pull in config file
+    ansible.builtin.include_vars:
+      file: "/configs/{{ inventory_hostname }}-vlandb.yml"
+
+  - name: set vlans based on file settings
+    arista.eos.eos_vlans:
+      config:
+      - vlan_id: item.vid
+        name: item.vname
+      state: overridden
+    loop: "{{ vlans }}"

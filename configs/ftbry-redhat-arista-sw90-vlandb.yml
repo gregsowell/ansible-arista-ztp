@@ -1,0 +1,9 @@
+vlans:
+  - vid: 10
+    vname: sales
+  - vid: 20
+    vname: marketing
+  - vid: 30
+    vname: it
+  - vid: 40
+    vname: accounting
