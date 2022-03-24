@@ -25,6 +25,9 @@
       new_host: "{{ item }}"
     loop: "{{ groups['all'] }}"
 
+  - name: set stats so the hostname will be passed between workflows
+    ansible.builtin.set_stat:
+      stat_host: "{{ new_host }}"
   
 - name: provision the found switch
   hosts: "{{ hostvars['provision_host']['new_host'] }}"

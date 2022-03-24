@@ -1,5 +1,5 @@
 - name: configure vlan db on aristas
-  hosts: provision_host
+  hosts: "{{ stat_host }}"
   gather_facts: false
   vars:
   tasks:
