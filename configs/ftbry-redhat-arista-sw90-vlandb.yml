@@ -1,9 +1,9 @@
 vlans:
-  - vid: 10
+  - vid: "10"
     vname: sales
-  - vid: 20
+  - vid: "20"
     vname: marketing
-  - vid: 30
+  - vid: "30"
     vname: it
-  - vid: 40
+  - vid: "40"
     vname: accounting
