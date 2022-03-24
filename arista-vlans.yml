@@ -19,7 +19,7 @@
       state: overridden
     loop: "{{ vlans }}"
 
-  - name: Configure trunk ports
+  - name: Configure access ports
     when: item.mode == "access"
     arista.eos.eos_l2_interfaces:
       config:
