@@ -1,4 +1,4 @@
-vlans:
+vlandb:
   - vid: "10"
     vname: sales
   - vid: "20"

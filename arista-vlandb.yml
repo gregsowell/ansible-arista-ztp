@@ -13,4 +13,8 @@
       - vlan_id: "{{ item.vid }}"
         name: "{{ item.vname }}"
       state: overridden
-    loop: "{{ vlans }}"
+    loop: "{{ vlandb }}"
+
+  - name: save to startup config
+    arista.eos.eos_command:
+      commands: copy running-config startup-config
