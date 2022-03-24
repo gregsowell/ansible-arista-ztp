@@ -21,10 +21,15 @@
       state: parsed
     register: parsed_config
 
-  - name: push in the parsed config.  use block to do it all as a chunk
-    arista.eos.eos_config:
-      lines: "{{ parsed_config }}"
-      replace: block
+  - name: set vlans based on file settings
+    arista.eos.eos_vlans:
+      config: "{{ parsed_config.parsed }}"
+      state: overridden
+
+#  - name: push in the parsed config.  use block to do it all as a chunk
+#    arista.eos.eos_config:
+#      lines: "{{ parsed_config }}"
+#      replace: block
 
   - name: save to startup config
     arista.eos.eos_command:
