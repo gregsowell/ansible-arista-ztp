@@ -16,7 +16,7 @@
         trunk:
           native_vlan: "{{ item.native | default(omit) }}"
           trunk_allowed_vlans: "{{ item.trunk_allowed | default(omit) }}"
-      state: overridden
+      state: replaced
     loop: "{{ vlans }}"
 
   - name: Configure access ports
@@ -27,7 +27,7 @@
         mode: access
         access:
           vlan: "{{ item.access_vlan }}"
-      state: overridden
+      state: replaced
     loop: "{{ vlans }}"
 
   - name: save to startup config
