@@ -1,0 +1,19 @@
+- name: configure ips on aristas
+  hosts: "{{ stat_host }}"
+  gather_facts: false
+  vars:
+  tasks:
+  - name: parse the ips config
+    arista.eos.eos_l3_interfaces:
+      running_config: "{{ lookup('file', 'configs/' + inventory_hostname + '-ips') }}"
+      state: parsed
+    register: parsed_config
+
+  - name: set ips based on file settings
+    arista.eos.eos_l3_interfaces:
+      config: "{{ parsed_config.parsed }}"
+      state: overridden
+
+  - name: save to startup config
+    arista.eos.eos_command:
+      commands: copy running-config startup-config

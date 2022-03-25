@@ -1,0 +1,19 @@
+- name: configure routes on aristas
+  hosts: "{{ stat_host }}"
+  gather_facts: false
+  vars:
+  tasks:
+  - name: parse the routes config
+    arista.eos.eos_static_routes:
+      running_config: "{{ lookup('file', 'configs/' + inventory_hostname + '-routes') }}"
+      state: parsed
+    register: parsed_config
+
+  - name: set routes based on file settings
+    arista.eos.eos_static_routes:
+      config: "{{ parsed_config.parsed }}"
+      state: overridden
+
+  - name: save to startup config
+    arista.eos.eos_command:
+      commands: copy running-config startup-config
