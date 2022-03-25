@@ -2,6 +2,6 @@ vlans:
   - int: Ethernet1
     mode: trunk
     trunk_allowed: 10-50
-  - int: Ethernet2
-    mode: access
-    access_vlan: 10
+#  - int: Ethernet2
+#    mode: access
+#    access_vlan: 10
